@@ -1,7 +1,7 @@
 /**
   ******************************************************************************
   * @file    support.c
-  * @author  Andrew Dile, 
+  * @author  Andrew Dile, Abhi Annigeri, Daniel Wang, William Lee
   * @date    November 4 2024
   * @brief   ECE 362 Snake Game
   ******************************************************************************
