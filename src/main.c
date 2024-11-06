@@ -9,11 +9,18 @@
 
 #include "header.h"
 
+// variables for game state handling
+int8_t gameState = IDLE;
+int8_t lastGameState = IDLE;
+
 // gameboard is 2D array of gametile structures, value of tile updated on snake movement
 uint8_t gameboard[NUM_X_CELLS][NUM_Y_CELLS] = {0}; // value determines what is displayed in that cell (0 = blank, 1 = snack, 2 = head facing left, etc.)
 
 // array to store snake
 segment snake[NUM_X_CELLS * NUM_Y_CELLS]; // not dynamically stored to avoid fragmentation and leaks, and to ensure program doesn't run out of space during gameplay
+
+// variable for joystick direction
+int8_t joystickDirection = NEUTRAL;
 
 // flag for some code to only run on first cycle
 bool initialized = false;
@@ -36,8 +43,8 @@ int main(void) {
     initialized = true;
   }
 
-  // update the snake's head's direction based on the joystick reading
-  snake[0].direction = readJoystick();
+  // read input and update the snake's head's direction based on the joystick reading
+  readJoystick();
 
   // update displays
   updateLCDDisplay();
