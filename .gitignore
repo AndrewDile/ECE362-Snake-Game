@@ -4,3 +4,5 @@
 .vscode/launch.json
 .vscode/ipch
 .vscode/settings.json
+.pio/build/nucleo_f091rc/idedata.json
+.vscode/c_cpp_properties.json
