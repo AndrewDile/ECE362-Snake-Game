@@ -78,7 +78,6 @@ void readMemory();
 void setupLCDDisplay();
 void updateLCDDisplay();
 void setupJoystick();
-void readJoystick();
 void movementLogic();
 void setupPWM();
 void playSound(uint8_t song);

@@ -43,9 +43,6 @@ int main(void) {
     initialized = true;
   }
 
-  // read input and update the snake's head's direction based on the joystick reading
-  readJoystick();
-
   // update displays
   updateLCDDisplay();
   updateGameDisplay();
