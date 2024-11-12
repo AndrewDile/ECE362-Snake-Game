@@ -8,11 +8,23 @@
 */
 
 #include "header.h"
+#define IDLE 0
+#define PLAYING 1
+#define GAME_OVER 2
 #define MAX_SNAKE_LENGTH (NUM_X_CELLS * NUM_Y_CELLS)
 #define INITIAL_SNAKE_LENGTH 3
 #define INITIAL_SNAKE_SPEED 500  // milliseconds between moves
 #define MIN_SNAKE_SPEED 100      // maximum speed (minimum delay)
 #define SPEED_INCREASE 25        // ms faster per snack eaten
+#define NUM_X_CELLS 20 // Number of cells horizontally
+#define NUM_Y_CELLS 20 // Number of cells vertically
+#define NEUTRAL 0
+#define UP 1
+#define DOWN 2
+#define LEFT 3
+#define RIGHT 4
+
+
 
 // Snake segment structure (if not already defined in header)
 typedef struct {
@@ -39,6 +51,15 @@ void setupLCDDisplay() {
 // function that updates LCD display
 void updateLCDDisplay() {
 
+}
+
+void init_gpio() {
+    RCC->AHBENR |= (RCC_AHBENR_GPIOAEN | RCC_AHBENR_GPIOBEN);
+    GPIOA->MODER |= (GPIO_MODER_MODER0 | GPIO_MODER_MODER1); // Joystick PA0, PA1 as analog
+    GPIOB->MODER &= ~(GPIO_MODER_MODER0 | GPIO_MODER_MODER1); // LED PB0, PB1 clear mode
+    GPIOB->MODER |= (GPIO_MODER_MODER0_0 | GPIO_MODER_MODER1_0); // Set PB0, PB1 as output
+    GPIOB->OSPEEDR |= (GPIO_OSPEEDER_OSPEEDR0 | GPIO_OSPEEDER_OSPEEDR1); // High speed for LEDs
+    GPIOB->PUPDR &= ~(GPIO_PUPDR_PUPDR0 | GPIO_PUPDR_PUPDR1); // No pull-up or pull-down for LEDs
 }
 
 // function to initialize ADC for joystick readings
@@ -70,6 +91,29 @@ void setupJoystick() {
 
   // enable ADC interrupt in NVIC
   NVIC_EnableIRQ(ADC1_IRQn);
+}
+
+
+int read_joystick_x() {
+
+}
+
+int read_joystick_y() {
+
+}
+
+int8_t getJoystickDirection(void) {
+    int x = read_joystick_x();
+    int y = read_joystick_y();
+    if (x > 200) return RIGHT;
+    else if (x < 50) return LEFT;
+    else if (y > 200) return UP;
+    else if (y < 50) return DOWN;
+    else return NEUTRAL;
+}
+
+void updateJoystickDirection(void) {
+    joystickDirection = getJoystickDirection();
 }
 
 // IRQ Handler when ADC conversion finishes
@@ -241,7 +285,14 @@ void movementLogic() {
 
 // set up PWM for use for LED and buzzer
 void setupPWM() {
-
+    RCC->APB1ENR |= RCC_APB1ENR_TIM3EN;
+    TIM3->PSC = 7999;
+    TIM3->ARR = 999;
+    TIM3->CCMR1 |= (6 << TIM_CCMR1_OC1M_Pos);
+    TIM3->CCMR1 |= TIM_CCMR1_OC1PE;
+    TIM3->CCER |= TIM_CCER_CC1E;
+    TIM3->CCR1 = 500;
+    TIM3->CR1 |= TIM_CR1_CEN;
 }
 
 // plays song based on value, maybe updates a flag once it finishes a song?
@@ -261,7 +312,11 @@ void setupGameDisplay() {
 
 // update the game display based on current gameboard values
 void updateGameDisplay() {
-
+    clearDisplay();
+    for (int i = 0; i < snakeLength; i++) {
+        drawSegment(snake[i].x, snake[i].y);
+    }
+    drawSnack();
 }
 
 // IRQ Handler that calls movementLogic() (TIM3 arbitrarily chosen, can be changed)

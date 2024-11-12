@@ -12,6 +12,11 @@
 // variables for game state handling
 int8_t gameState = IDLE;
 int8_t lastGameState = IDLE;
+uint8_t gameboard[NUM_X_CELLS][NUM_Y_CELLS] = {EMPTY};
+segment snake[NUM_X_CELLS * NUM_Y_CELLS];
+int gameSpeed = INITIAL_SNAKE_SPEED;
+int8_t joystickDirection = NEUTRAL;
+bool initialized = false;
 
 // gameboard is 2D array of gametile structures, value of tile updated on snake movement
 uint8_t gameboard[NUM_X_CELLS][NUM_Y_CELLS] = {0}; // value determines what is displayed in that cell (0 = blank, 1 = snack, 2 = head facing left, etc.)
