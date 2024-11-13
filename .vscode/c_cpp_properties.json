@@ -8,19 +8,19 @@
         {
             "name": "PlatformIO",
             "includePath": [
-                "C:/Users/will0/Documents/GitHub/ECE362-Snake-Game/include",
-                "C:/Users/will0/Documents/GitHub/ECE362-Snake-Game/src",
-                "C:/Users/will0/.platformio/packages/framework-cmsis/CMSIS/Include",
-                "C:/Users/will0/.platformio/packages/framework-cmsis-stm32f0/Include",
+                "/Users/abhiannigeri/Documents/GitHub/ECE362-Snake-Game/include",
+                "/Users/abhiannigeri/Documents/GitHub/ECE362-Snake-Game/src",
+                "/Users/abhiannigeri/.platformio/packages/framework-cmsis/CMSIS/Include",
+                "/Users/abhiannigeri/.platformio/packages/framework-cmsis-stm32f0/Include",
                 ""
             ],
             "browse": {
                 "limitSymbolsToIncludedHeaders": true,
                 "path": [
-                    "C:/Users/will0/Documents/GitHub/ECE362-Snake-Game/include",
-                    "C:/Users/will0/Documents/GitHub/ECE362-Snake-Game/src",
-                    "C:/Users/will0/.platformio/packages/framework-cmsis/CMSIS/Include",
-                    "C:/Users/will0/.platformio/packages/framework-cmsis-stm32f0/Include",
+                    "/Users/abhiannigeri/Documents/GitHub/ECE362-Snake-Game/include",
+                    "/Users/abhiannigeri/Documents/GitHub/ECE362-Snake-Game/src",
+                    "/Users/abhiannigeri/.platformio/packages/framework-cmsis/CMSIS/Include",
+                    "/Users/abhiannigeri/.platformio/packages/framework-cmsis-stm32f0/Include",
                     ""
                 ]
             },
@@ -31,7 +31,7 @@
                 "F_CPU=48000000L",
                 ""
             ],
-            "compilerPath": "C:/Users/will0/.platformio/packages/toolchain-gccarmnoneeabi/bin/arm-none-eabi-gcc.exe",
+            "compilerPath": "/Users/abhiannigeri/.platformio/packages/toolchain-gccarmnoneeabi/bin/arm-none-eabi-gcc",
             "compilerArgs": [
                 "-mthumb",
                 "-mcpu=cortex-m0",

@@ -190,7 +190,7 @@ void generateSnack() {
     
     do {
         validPosition = true;
-        s
+        
         // Generate random position
         x = rand() % NUM_X_CELLS;
         y = rand() % NUM_Y_CELLS;
@@ -317,7 +317,13 @@ void playSound(uint8_t song) {
 
 
 // set LED color based on value, should be able to pull pretty much verbatum from PWM lab
-void setLED(uint8_t value) {
+void setrgb(int rgb) {
+    uint8_t b = bcd2dec(rgb & 0xFF); //blue
+    uint8_t b = bcd2dec((rgb >> 8) & 0xFF); //green
+    uint8_t b = bcd2dec((rgb >> 16) & 0xFF); //red
+
+
+
 
 }
 
