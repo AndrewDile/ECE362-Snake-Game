@@ -79,7 +79,9 @@ void setupLCDDisplay();
 void updateLCDDisplay();
 void setupJoystick();
 void movementLogic();
-void setupPWM();
-void playSound(uint8_t song);
 void setupGameDisplay();
 void updateGameDisplay();
+//sound functions
+void setupPWM();
+void playSound(uint8_t song);
+void stopSound();
