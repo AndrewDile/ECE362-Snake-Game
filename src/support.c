@@ -190,7 +190,7 @@ void generateSnack() {
     
     do {
         validPosition = true;
-        
+        s
         // Generate random position
         x = rand() % NUM_X_CELLS;
         y = rand() % NUM_Y_CELLS;
@@ -297,8 +297,24 @@ void setupPWM() {
 
 // plays song based on value, maybe updates a flag once it finishes a song?
 void playSound(uint8_t song) {
+    switch(song) {
+        case 0:
+            TIM3->ARR = 999;
+            break;
+        case 1:
+            TIM3->ARR = 799;
+            break;
+        case 2:
+            TIM3->ARR = 599;
+            break;
+        default:
+            TIM3->CCR1 = 0; //muted 
+            return;
+    }
+    TIM3->CCR1 = TIM3->ARR / 2; //maintains 50% cycle 
 
 }
+
 
 // set LED color based on value, should be able to pull pretty much verbatum from PWM lab
 void setLED(uint8_t value) {
