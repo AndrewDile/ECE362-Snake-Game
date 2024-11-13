@@ -23,6 +23,8 @@
 #define DOWN 2
 #define LEFT 3
 #define RIGHT 4
+#define PWM_MAX 2400
+
 
 
 
@@ -315,17 +317,40 @@ void playSound(uint8_t song) {
 
 }
 
+int getrgb(void); //helper function for setrgb
+
+// Helper function for you
+// Accept a byte in BCD format and convert it to decimal
+uint8_t bcd2dec(uint8_t bcd) {
+    // Lower digit
+    uint8_t dec = bcd & 0xF;
+
+    // Higher digit
+    dec += 10 * (bcd >> 4);
+    return dec;
+}
 
 // set LED color based on value, should be able to pull pretty much verbatum from PWM lab
 void setrgb(int rgb) {
     uint8_t b = bcd2dec(rgb & 0xFF); //blue
-    uint8_t b = bcd2dec((rgb >> 8) & 0xFF); //green
-    uint8_t b = bcd2dec((rgb >> 16) & 0xFF); //red
+    uint8_t g = bcd2dec((rgb >> 8) & 0xFF); //green
+    uint8_t r = bcd2dec((rgb >> 16) & 0xFF); //red
 
+    uint8_t red_duty = 100 - r;
+    uint8_t green_duty = 100 - g;
+    uint8_t blue_duty = 100 - b;
 
+    uint16_t red_scaled = (red_duty * PWM_MAX) / 100;
+    uint16_t green_scaled = (green_duty * PWM_MAX) / 100;
+    uint16_t blue_scaled = (green_duty * PWM_MAX) / 100;
 
-
+    TIM1->CCR1 = red_scaled;   // Red LED (connected to TIM1->CCR1)
+    TIM1->CCR2 = green_scaled; // Green LED (connected to TIM1->CCR2)
+    TIM1->CCR3 = blue_scaled;  // Blue LED (connected to TIM1->CCR3)
 }
+
+
+
 
 // set up game display (and maybe SD interface?) to be communicated with
 void setupGameDisplay() {
