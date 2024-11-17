@@ -372,3 +372,17 @@ void TIM3_IRQHandler() {
         movementLogic();          // Call movement logic
     }
 }
+
+void enable_sdcard() {
+    RCC->AHBENR |= (RCC_AHBENR_GPIOBEN);
+    GPIOB->MODER &= ~(GPIO_MODER_MODER4 | GPIO_MODER_MODER5); //pb2 set to low
+
+}
+
+void disable_sdcard() {
+    RCC->AHBENR |= (RCC_AHBENR_GPIOBEN);
+    GPIOB->MODER &= ~0xFFFFFFFF; //pb2 set to low
+
+    GPIOB->MODER |= (GPIO_MODER_MODER4 | GPIO_MODER_MODER5); //pb2 set to high
+}
+
