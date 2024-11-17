@@ -26,6 +26,14 @@ int8_t joystickDirection = NEUTRAL;
 // flag for some code to only run on first cycle
 bool initialized = false;
 
+void init_spi1_slow(){
+  RCC -> AHBENR |= RCC_AHBENR_GPIOBEN;
+  GPIOB -> MODER = (GPIOB -> MODER & ~(GPIO_MODER_MODER3 | GPIO_MODER_MODER4 | GPIO_MODER_MODER5)) | GPIO_MODER_MODER3_1 | GPIO_MODER_MODER4_1 | GPIO_MODER_MODER5_1;
+  SPI1->CR1 = SPI_CR1_MSTR | SPI_CR1_BR | SPI_CR1_SSM; 
+  SPI1->CR2 = SPI_CR2_TXDMAEN | SPI_CR2_RXDMAEN | SPI_CR2_SSOE | SPI_CR2_RXNEIE | SPI_CR2_FRXTH | SPI_CR2_DS_2 | SPI_CR2_DS_1 | SPI_CR2_DS_0;
+  SPI1->CR1 |= SPI_CR1_SPE; 
+}
+
 int main(void) {
   if (!initialized) {
     // set up game display (and SD interface) for communication
