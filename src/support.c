@@ -96,13 +96,13 @@ void setupJoystick() {
 }
 
 
-int read_joystick_x() {
+// int read_joystick_x() {
 
-}
+// }
 
-int read_joystick_y() {
+// int read_joystick_y() {
 
-}
+// }
 
 int8_t getJoystickDirection(void) {
     int x = read_joystick_x();
@@ -169,7 +169,6 @@ void setupMovementTimer() {
     RCC->APB1ENR |= RCC_APB1ENR_TIM3EN;
     
     // Set prescaler for 1ms resolution
-    // Assuming 48MHz system clock
     TIM3->PSC = 47999;  // 48MHz/48000 = 1kHz
     
     // Set initial period to snakeSpeed (in ms)

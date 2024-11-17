@@ -12,11 +12,11 @@
             "type": "platformio-debug",
             "request": "launch",
             "name": "PIO Debug",
-            "executable": "/Users/abhiannigeri/Documents/GitHub/ECE362-Snake-Game/.pio/build/nucleo_f091rc/firmware.elf",
+            "executable": "/Users/daniel/Documents/GitHub/ECE362-Snake-Game/.pio/build/nucleo_f091rc/firmware.elf",
             "projectEnvName": "nucleo_f091rc",
-            "toolchainBinDir": "/Users/abhiannigeri/.platformio/packages/toolchain-gccarmnoneeabi/bin",
+            "toolchainBinDir": "/Users/daniel/.platformio/packages/toolchain-gccarmnoneeabi/bin",
             "internalConsoleOptions": "openOnSessionStart",
-            "svdPath": "/Users/abhiannigeri/.platformio/platforms/ststm32/misc/svd/STM32F091x.svd",
+            "svdPath": "/Users/daniel/.platformio/platforms/ststm32/misc/svd/STM32F091x.svd",
             "preLaunchTask": {
                 "type": "PlatformIO",
                 "task": "Pre-Debug"
@@ -26,21 +26,21 @@
             "type": "platformio-debug",
             "request": "launch",
             "name": "PIO Debug (skip Pre-Debug)",
-            "executable": "/Users/abhiannigeri/Documents/GitHub/ECE362-Snake-Game/.pio/build/nucleo_f091rc/firmware.elf",
+            "executable": "/Users/daniel/Documents/GitHub/ECE362-Snake-Game/.pio/build/nucleo_f091rc/firmware.elf",
             "projectEnvName": "nucleo_f091rc",
-            "toolchainBinDir": "/Users/abhiannigeri/.platformio/packages/toolchain-gccarmnoneeabi/bin",
+            "toolchainBinDir": "/Users/daniel/.platformio/packages/toolchain-gccarmnoneeabi/bin",
             "internalConsoleOptions": "openOnSessionStart",
-            "svdPath": "/Users/abhiannigeri/.platformio/platforms/ststm32/misc/svd/STM32F091x.svd"
+            "svdPath": "/Users/daniel/.platformio/platforms/ststm32/misc/svd/STM32F091x.svd"
         },
         {
             "type": "platformio-debug",
             "request": "launch",
             "name": "PIO Debug (without uploading)",
-            "executable": "/Users/abhiannigeri/Documents/GitHub/ECE362-Snake-Game/.pio/build/nucleo_f091rc/firmware.elf",
+            "executable": "/Users/daniel/Documents/GitHub/ECE362-Snake-Game/.pio/build/nucleo_f091rc/firmware.elf",
             "projectEnvName": "nucleo_f091rc",
-            "toolchainBinDir": "/Users/abhiannigeri/.platformio/packages/toolchain-gccarmnoneeabi/bin",
+            "toolchainBinDir": "/Users/daniel/.platformio/packages/toolchain-gccarmnoneeabi/bin",
             "internalConsoleOptions": "openOnSessionStart",
-            "svdPath": "/Users/abhiannigeri/.platformio/platforms/ststm32/misc/svd/STM32F091x.svd",
+            "svdPath": "/Users/daniel/.platformio/platforms/ststm32/misc/svd/STM32F091x.svd",
             "loadMode": "manual"
         }
     ]
