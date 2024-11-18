@@ -9,6 +9,11 @@
 
 #include "header.h"
 
+// Global variables (if not already defined)
+extern uint8_t snakeLength;
+extern uint32_t snakeSpeed;  // in milliseconds
+extern bool gameOver;
+
 // access memory via SPI to SD interface to get high score memory
 void readMemory() {
 
@@ -67,8 +72,8 @@ void setupJoystick() {
 // IRQ Handler when ADC conversion finishes
 void ADC1_IRQHandler() {
   // initialize temp variables
-  static int8_t x = -1;
-  static int8_t y = -1;
+  int8_t x = -1;
+  int8_t y = -1;
 
   // read values sequentially
   if (ADC1->ISR & ADC_ISR_EOC) {
@@ -86,16 +91,14 @@ void ADC1_IRQHandler() {
 
       // start new ADC conversion
       ADC1->CR |= ADC_CR_ADSTART;
-      x = -1;
-      y = -1;
     }
   }
 }
 
 void initializeSnake() {
     // Start snake in middle of board
-    // uint8_t startX = NUM_X_CELLS / 2;
-    // uint8_t startY = NUM_Y_CELLS / 2;
+    uint8_t startX = NUM_X_CELLS / 2;
+    uint8_t startY = NUM_Y_CELLS / 2;
     
     // // Initialize snake segments
     // for(int i = 0; i < snakeLength; i++) {
@@ -131,7 +134,7 @@ void setupMovementTimer() {
 // Generate new snack at random position
 void generateSnack() {
     uint8_t x, y;
-    // bool validPosition;
+    bool validPosition;
     
     // do {
     //     validPosition = true;
@@ -150,7 +153,7 @@ void generateSnack() {
     // } while(!validPosition);
     
     // Place snack on gameboard
-    // gameboard[x][y] = 1;  // 1 represents snack
+    gameboard[x][y] = 1;  // 1 represents snack
 }
 
 // iterates over snake and updates segments and gameboard, maybe calls playSound based on what is happening?
@@ -282,7 +285,7 @@ void setrgb(int rgb) {
 
     uint16_t red_scaled = (red_duty * PWM_MAX) / 100;
     uint16_t green_scaled = (green_duty * PWM_MAX) / 100;
-    uint16_t blue_scaled = (blue_duty * PWM_MAX) / 100;
+    uint16_t blue_scaled = (green_duty * PWM_MAX) / 100;
 
     TIM1->CCR1 = red_scaled;   // Red LED (connected to TIM1->CCR1)
     TIM1->CCR2 = green_scaled; // Green LED (connected to TIM1->CCR2)
@@ -295,13 +298,13 @@ void setupGameDisplay() {
 }
 
 // update the game display based on current gameboard values
-// void updateGameDisplay() {
-//     clearDisplay();
-//     for (int i = 0; i < snakeLength; i++) {
-//         drawSegment(snake[i].x, snake[i].y);
-//     }
-//     drawSnack();
-// }
+void updateGameDisplay() {
+    clearDisplay();
+    for (int i = 0; i < snakeLength; i++) {
+        drawSegment(snake[i].x, snake[i].y);
+    }
+    drawSnack();
+}
 
 // IRQ Handler that calls movementLogic() (TIM3 arbitrarily chosen, can be changed)
 void TIM3_IRQHandler() {
@@ -312,8 +315,8 @@ void TIM3_IRQHandler() {
 }
 
 void init_spi1_slow() {
-    RCC->APB2ENR |= RCC_APB2ENR_SPI1EN;
-    RCC->AHBENR |= RCC_AHBENR_GPIOBEN;
+    RCC->APB2ENR != RCC_APB2ENR_SPI1EN;
+    RCC->AHBENR != RCC_AHBENR_GPIOBEN;
 
     GPIOB->MODER &= ~(GPIO_MODER_MODER3 | GPIO_MODER_MODER4 | GPIO_MODER_MODER5);
     GPIOB->MODER |= (GPIO_MODER_MODER3_1 | GPIO_MODER_MODER4_1 | GPIO_MODER_MODER5_1);
@@ -361,4 +364,51 @@ void init_lcd_spi() {
     GPIOB->MODER |= (GPIO_MODER_MODER8_0 | GPIO_MODER_MODER11_0 | GPIO_MODER_MODER14_0);
     init_spi1_slow();
     sdcard_io_high_speed();
+}
+
+void systick_init(void) {
+    // Disable SysTick during initialization
+    SysTick->CTRL = 0;
+    
+    // Set maximum reload value
+    SysTick->LOAD = 0xFFFFFF;
+    
+    // Clear current value
+    SysTick->VAL = 0;
+    
+    // Enable SysTick with processor clock
+    SysTick->CTRL = SYSTICK_ENABLE | SYSTICK_CLKSOURCE;
+}
+
+void nano_wait(uint32_t nanoseconds) {
+    // Calculate number of ticks needed
+    // ticks = (nanoseconds * SYSCLK) / 1e9
+    // To avoid overflow, we'll do this in steps
+    
+    uint32_t ticks = ((nanoseconds / 1000) * (SYSCLK / 1000000));
+    
+    if (ticks > 0xFFFFFF) {
+        // If delay is too long, break it into chunks
+        while (ticks > 0xFFFFFF) {
+            // Load maximum value
+            SysTick->LOAD = 0xFFFFFF;
+            // Clear current value
+            SysTick->VAL = 0;
+            
+            // Wait for flag to be set
+            while (!(SysTick->CTRL & (1 << 16)));
+            
+            ticks -= 0xFFFFFF;
+        }
+    }
+    
+    if (ticks > 0) {
+        // Load remaining ticks
+        SysTick->LOAD = ticks - 1;
+        // Clear current value
+        SysTick->VAL = 0;
+        
+        // Wait for flag to be set
+        while (!(SysTick->CTRL & (1 << 16)));
+    }
 }
