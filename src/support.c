@@ -84,6 +84,8 @@ void ADC1_IRQHandler() {
       else if (y > 50) joystickDirection = UP;
       else joystickDirection = NEUTRAL;
 
+      snake[0].direction = joystickDirection;
+
       // start new ADC conversion
       ADC1->CR |= ADC_CR_ADSTART;
       x = -1;
@@ -130,6 +132,10 @@ void setupMovementTimer() {
 
 // Generate new snack at random position
 void generateSnack() {
+    // array of available spaces
+    // iterating over the whole gameboard
+    // random index in that range
+
     // uint8_t x, y;
     // bool validPosition;
     
@@ -155,6 +161,12 @@ void generateSnack() {
 
 // iterates over snake and updates segments and gameboard, maybe calls playSound based on what is happening?
 void movementLogic() {
+// iterate over snake
+// check for snack
+// update snake head along with all segments
+// update snake position based on direction
+// update the game board
+
 //    if(gameOver) return;
     
 //     // Calculate new head position
