@@ -39,6 +39,16 @@
 #define NUM_X_CELLS 25
 #define NUM_Y_CELLS 25
 
+//test
+// 240x320
+#define LCD_WIDTH 240
+#define LCD_HEIGHT 320
+
+//cell dimensions
+// #define CELL_WIDTH (DISPLAY_WIDTH / NUM_X_CELLS)   // 240/25 = 9.6 pixels
+// #define CELL_HEIGHT (DISPLAY_HEIGHT / NUM_Y_CELLS)  // 320/25 = 12.8 pixels
+
+
 // direction constants for code readability and standardization
 #define NEUTRAL -1
 #define RIGHT 0
