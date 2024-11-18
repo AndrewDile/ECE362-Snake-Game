@@ -56,6 +56,15 @@
 #define BEND_LEFT_UP BEND_UP_LEFT
 #define BEND_LEFT_DOWN BEND_DOWN_LEFT
 
+// constants for snake and movement
+#define INITIAL_SNAKE_SPEED 500  // milliseconds between speed
+#define INITIAL_SNAKE_LENGTH 2  // segments including head
+#define MAX_SNAKE_LENGTH (NUM_X_CELLS * NUM_Y_CELLS)
+#define MIN_SNAKE_SPEED 100      // maximum speed (minimum delay)
+#define SPEED_INCREASE 25        // ms faster per snack eaten
+
+#define PWM_MAX 2400
+
 // each segment of the snake needs a position and a direction value
 struct segment {
   uint8_t x; // horizontal gametile position -- left = 0
@@ -67,21 +76,25 @@ struct segment {
 typedef struct segment segment;
 
 // exteral variables declared so other files to access
-extern int8_t gameState;
+extern int8_t gameState;  // game over can be derived from this
 extern int8_t lastGameState;
-extern int8_t joystickDirection;
 extern uint8_t gameboard[NUM_X_CELLS][NUM_Y_CELLS];
 extern segment snake[NUM_X_CELLS * NUM_Y_CELLS];
+int8_t snakeLength = INITIAL_SNAKE_LENGTH; // current score can be derived from this
+uint32_t snakeSpeed = INITIAL_SNAKE_SPEED;
+extern int8_t joystickDirection;
 
 // function declarations
 void readMemory();
 void setupLCDDisplay();
 void updateLCDDisplay();
 void setupJoystick();
+void initializeSnake();
+void setupMovementTimer();
+void generateSnack();
 void movementLogic();
-void setupGameDisplay();
-void updateGameDisplay();
-//sound functions
 void setupPWM();
 void playSound(uint8_t song);
 void stopSound();
+void setupGameDisplay();
+void updateGameDisplay();

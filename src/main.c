@@ -12,7 +12,6 @@
 // variables for game state handling
 int8_t gameState = IDLE;
 int8_t lastGameState = IDLE;
-int gameSpeed = INITIAL_SNAKE_SPEED;
 
 // gameboard is 2D array of gametile structures, value of tile updated on snake movement
 uint8_t gameboard[NUM_X_CELLS][NUM_Y_CELLS] = {0}; // value determines what is displayed in that cell (0 = blank, 1 = snack, 2 = head facing left, etc.)
@@ -20,19 +19,15 @@ uint8_t gameboard[NUM_X_CELLS][NUM_Y_CELLS] = {0}; // value determines what is d
 // array to store snake
 segment snake[NUM_X_CELLS * NUM_Y_CELLS]; // not dynamically stored to avoid fragmentation and leaks, and to ensure program doesn't run out of space during gameplay
 
+// variables for snake behavior
+int8_t snakeLength = INITIAL_SNAKE_LENGTH; // current score can be derived from this
+uint32_t snakeSpeed = INITIAL_SNAKE_SPEED;
+
 // variable for joystick direction
 int8_t joystickDirection = NEUTRAL;
 
 // flag for some code to only run on first cycle
 bool initialized = false;
-
-void init_spi1_slow(){
-  RCC -> AHBENR |= RCC_AHBENR_GPIOBEN;
-  GPIOB -> MODER = (GPIOB -> MODER & ~(GPIO_MODER_MODER3 | GPIO_MODER_MODER4 | GPIO_MODER_MODER5)) | GPIO_MODER_MODER3_1 | GPIO_MODER_MODER4_1 | GPIO_MODER_MODER5_1;
-  SPI1->CR1 = SPI_CR1_MSTR | SPI_CR1_BR | SPI_CR1_SSM; 
-  SPI1->CR2 = SPI_CR2_TXDMAEN | SPI_CR2_RXDMAEN | SPI_CR2_SSOE | SPI_CR2_RXNEIE | SPI_CR2_FRXTH | SPI_CR2_DS_2 | SPI_CR2_DS_1 | SPI_CR2_DS_0;
-  SPI1->CR1 |= SPI_CR1_SPE; 
-}
 
 int main(void) {
   if (!initialized) {

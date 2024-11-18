@@ -8,31 +8,6 @@
 */
 
 #include "header.h"
-#define IDLE 0
-#define PLAYING 1
-#define GAME_OVER 2
-#define MAX_SNAKE_LENGTH (NUM_X_CELLS * NUM_Y_CELLS)
-#define INITIAL_SNAKE_LENGTH 3
-#define INITIAL_SNAKE_SPEED 500  // milliseconds between moves
-#define MIN_SNAKE_SPEED 100      // maximum speed (minimum delay)
-#define SPEED_INCREASE 25        // ms faster per snack eaten
-#define NUM_X_CELLS 20 // Number of cells horizontally
-#define NUM_Y_CELLS 20 // Number of cells vertically
-#define NEUTRAL 0
-#define UP 1
-#define DOWN 2
-#define LEFT 3
-#define RIGHT 4
-#define PWM_MAX 2400
-
-
-
-
-// Snake segment structure (if not already defined in header)
-typedef struct {
-    uint8_t x;
-    uint8_t y;
-} segment;
 
 // Global variables (if not already defined)
 extern uint8_t snakeLength;
@@ -55,14 +30,14 @@ void updateLCDDisplay() {
 
 }
 
-void init_gpio() {
-    RCC->AHBENR |= (RCC_AHBENR_GPIOAEN | RCC_AHBENR_GPIOBEN);
-    GPIOA->MODER |= (GPIO_MODER_MODER0 | GPIO_MODER_MODER1); // Joystick PA0, PA1 as analog
-    GPIOB->MODER &= ~(GPIO_MODER_MODER0 | GPIO_MODER_MODER1); // LED PB0, PB1 clear mode
-    GPIOB->MODER |= (GPIO_MODER_MODER0_0 | GPIO_MODER_MODER1_0); // Set PB0, PB1 as output
-    GPIOB->OSPEEDR |= (GPIO_OSPEEDER_OSPEEDR0 | GPIO_OSPEEDER_OSPEEDR1); // High speed for LEDs
-    GPIOB->PUPDR &= ~(GPIO_PUPDR_PUPDR0 | GPIO_PUPDR_PUPDR1); // No pull-up or pull-down for LEDs
-}
+// void init_gpio() {
+//     RCC->AHBENR |= (RCC_AHBENR_GPIOAEN | RCC_AHBENR_GPIOBEN);
+//     GPIOA->MODER |= (GPIO_MODER_MODER0 | GPIO_MODER_MODER1); // Joystick PA0, PA1 as analog
+//     GPIOB->MODER &= ~(GPIO_MODER_MODER0 | GPIO_MODER_MODER1); // LED PB0, PB1 clear mode
+//     GPIOB->MODER |= (GPIO_MODER_MODER0_0 | GPIO_MODER_MODER1_0); // Set PB0, PB1 as output
+//     GPIOB->OSPEEDR |= (GPIO_OSPEEDER_OSPEEDR0 | GPIO_OSPEEDER_OSPEEDR1); // High speed for LEDs
+//     GPIOB->PUPDR &= ~(GPIO_PUPDR_PUPDR0 | GPIO_PUPDR_PUPDR1); // No pull-up or pull-down for LEDs
+// }
 
 // function to initialize ADC for joystick readings
 void setupJoystick() {
@@ -93,29 +68,6 @@ void setupJoystick() {
 
   // enable ADC interrupt in NVIC
   NVIC_EnableIRQ(ADC1_IRQn);
-}
-
-
-// int read_joystick_x() {
-
-// }
-
-// int read_joystick_y() {
-
-// }
-
-int8_t getJoystickDirection(void) {
-    int x = read_joystick_x();
-    int y = read_joystick_y();
-    if (x > 200) return RIGHT;
-    else if (x < 50) return LEFT;
-    else if (y > 200) return UP;
-    else if (y < 50) return DOWN;
-    else return NEUTRAL;
-}
-
-void updateJoystickDirection(void) {
-    joystickDirection = getJoystickDirection();
 }
 
 // IRQ Handler when ADC conversion finishes
@@ -149,16 +101,12 @@ void initializeSnake() {
     uint8_t startX = NUM_X_CELLS / 2;
     uint8_t startY = NUM_Y_CELLS / 2;
     
-    snakeLength = INITIAL_SNAKE_LENGTH;
-    snakeSpeed = INITIAL_SNAKE_SPEED;
-    gameOver = false;
-    
-    // Initialize snake segments
-    for(int i = 0; i < snakeLength; i++) {
-        snake[i].x = startX - i;  // Snake starts horizontally
-        snake[i].y = startY;
-        gameboard[startX - i][startY] = (i == 0) ? 2 : 3;  // 2 for head, 3 for body
-    }
+    // // Initialize snake segments
+    // for(int i = 0; i < snakeLength; i++) {
+    //     snake[i].x = startX - i;  // Snake starts horizontally
+    //     snake[i].y = startY;
+    //     gameboard[startX - i][startY] = (i == 0) ? 2 : 3;  // 2 for head, 3 for body
+    // }
     
     // Generate first snack
     generateSnack();
@@ -189,21 +137,21 @@ void generateSnack() {
     uint8_t x, y;
     bool validPosition;
     
-    do {
-        validPosition = true;
+    // do {
+    //     validPosition = true;
         
-        // Generate random position
-        x = rand() % NUM_X_CELLS;
-        y = rand() % NUM_Y_CELLS;
+    //     // Generate random position
+    //     x = rand() % NUM_X_CELLS;
+    //     y = rand() % NUM_Y_CELLS;
         
-        // Check if position is occupied by snake
-        for(int i = 0; i < snakeLength; i++) {
-            if(snake[i].x == x && snake[i].y == y) {
-                validPosition = false;
-                break;
-            }
-        }
-    } while(!validPosition);
+    //     // Check if position is occupied by snake
+    //     for(int i = 0; i < snakeLength; i++) {
+    //         if(snake[i].x == x && snake[i].y == y) {
+    //             validPosition = false;
+    //             break;
+    //         }
+    //     }
+    // } while(!validPosition);
     
     // Place snack on gameboard
     gameboard[x][y] = 1;  // 1 represents snack
@@ -211,78 +159,76 @@ void generateSnack() {
 
 // iterates over snake and updates segments and gameboard, maybe calls playSound based on what is happening?
 void movementLogic() {
-   if(gameOver) return;
+//    if(gameOver) return;
     
-    // Calculate new head position
-    uint8_t newHeadX = snake[0].x;
-    uint8_t newHeadY = snake[0].y;
+//     // Calculate new head position
+//     uint8_t newHeadX = snake[0].x;
+//     uint8_t newHeadY = snake[0].y;
     
-    // Update position based on joystick direction
-    switch(joystickDirection) {
-        case UP:
-            newHeadY = (newHeadY + 1) % NUM_Y_CELLS;
-            break;
-        case DOWN:
-            newHeadY = (newHeadY - 1 + NUM_Y_CELLS) % NUM_Y_CELLS;
-            break;
-        case LEFT:
-            newHeadX = (newHeadX - 1 + NUM_X_CELLS) % NUM_X_CELLS;
-            break;
-        case RIGHT:
-            newHeadX = (newHeadX + 1) % NUM_X_CELLS;
-            break;
-        default:
-            return;  // No movement if joystick is neutral
-    }
+//     // Update position based on joystick direction
+//     switch(joystickDirection) {
+//         case UP:
+//             newHeadY = (newHeadY + 1) % NUM_Y_CELLS;
+//             break;
+//         case DOWN:
+//             newHeadY = (newHeadY - 1 + NUM_Y_CELLS) % NUM_Y_CELLS;
+//             break;
+//         case LEFT:
+//             newHeadX = (newHeadX - 1 + NUM_X_CELLS) % NUM_X_CELLS;
+//             break;
+//         case RIGHT:
+//             newHeadX = (newHeadX + 1) % NUM_X_CELLS;
+//             break;
+//         default:
+//             return;  // No movement if joystick is neutral
+//     }
     
-    // Check for collision with self
-    for(int i = 0; i < snakeLength; i++) {
-        if(snake[i].x == newHeadX && snake[i].y == newHeadY) {
-            gameOver = true;
-            return;
-        }
-    }
+//     // Check for collision with self
+//     for(int i = 0; i < snakeLength; i++) {
+//         if(snake[i].x == newHeadX && snake[i].y == newHeadY) {
+//             gameOver = true;
+//             return;
+//         }
+//     }
     
-    // Check if snack was eaten
-    bool snackEaten = (gameboard[newHeadX][newHeadY] == 1);
+//     // Check if snack was eaten
+//     bool snackEaten = (gameboard[newHeadX][newHeadY] == 1);
     
-    // Move snake body
-    if(!snackEaten) {
-        // Clear last segment on gameboard
-        gameboard[snake[snakeLength-1].x][snake[snakeLength-1].y] = 0;
+//     // Move snake body
+//     if(!snackEaten) {
+//         // Clear last segment on gameboard
+//         gameboard[snake[snakeLength-1].x][snake[snakeLength-1].y] = 0;
         
-        // Move body segments
-        for(int i = snakeLength-1; i > 0; i--) {
-            snake[i] = snake[i-1];
-        }
-    } else {
-        // Increase snake length
-        if(snakeLength < MAX_SNAKE_LENGTH) {
-            snakeLength++;
+//         // Move body segments
+//         for(int i = snakeLength-1; i > 0; i--) {
+//             snake[i] = snake[i-1];
+//         }
+//     } else {
+//         // Increase snake length
+//         if(snakeLength < MAX_SNAKE_LENGTH) {
+//             snakeLength++;
             
-            // Increase speed
-            if(snakeSpeed > MIN_SNAKE_SPEED) {
-                snakeSpeed -= SPEED_INCREASE;
-                TIM3->ARR = snakeSpeed;  // Update timer period
-            }
+//             // Increase speed
+//             if(snakeSpeed > MIN_SNAKE_SPEED) {
+//                 snakeSpeed -= SPEED_INCREASE;
+//                 TIM3->ARR = snakeSpeed;  // Update timer period
+//             }
             
-            // Generate new snack
-            generateSnack();
-        }
-    }
+//             // Generate new snack
+//             generateSnack();
+//         }
+//     }
     
-    // Update head position
-    snake[0].x = newHeadX;
-    snake[0].y = newHeadY;
+//     // Update head position
+//     snake[0].x = newHeadX;
+//     snake[0].y = newHeadY;
     
-    // Update gameboard
-    gameboard[newHeadX][newHeadY] = 2;  // Head
-    for(int i = 1; i < snakeLength; i++) {
-        gameboard[snake[i].x][snake[i].y] = 3;  // Body
-    }
+//     // Update gameboard
+//     gameboard[newHeadX][newHeadY] = 2;  // Head
+//     for(int i = 1; i < snakeLength; i++) {
+//         gameboard[snake[i].x][snake[i].y] = 3;  // Body
+//     }
 }
-
-
 
 // set up PWM for use for LED and buzzer
 void setupPWM() {
@@ -313,7 +259,6 @@ void playSound(uint8_t song) {
             return;
     }
     TIM3->CCR1 = TIM3->ARR / 2; //maintains 50% cycle 
-
 }
 
 int getrgb(void); //helper function for setrgb
@@ -348,9 +293,6 @@ void setrgb(int rgb) {
     TIM1->CCR3 = blue_scaled;  // Blue LED (connected to TIM1->CCR3)
 }
 
-
-
-
 // set up game display (and maybe SD interface?) to be communicated with
 void setupGameDisplay() {
 
@@ -373,29 +315,54 @@ void TIM3_IRQHandler() {
     }
 }
 
-void enable_sdcard() {
-    RCC->AHBENR |= (RCC_AHBENR_GPIOBEN);
-    GPIOB->MODER &= ~(GPIO_MODER_MODER4 | GPIO_MODER_MODER5); //pb2 set to low
+void init_spi1_slow() {
+    RCC->APB2ENR != RCC_APB2ENR_SPI1EN;
+    RCC->AHBENR != RCC_AHBENR_GPIOBEN;
 
+    GPIOB->MODER &= ~(GPIO_MODER_MODER3 | GPIO_MODER_MODER4 | GPIO_MODER_MODER5);
+    GPIOB->MODER |= (GPIO_MODER_MODER3_1 | GPIO_MODER_MODER4_1 | GPIO_MODER_MODER5_1);
+
+    GPIOB->AFR[0] &= ~(GPIO_AFRL_AFSEL3 | GPIO_AFRL_AFSEL4 | GPIO_AFRL_AFSEL5);
+    GPIOB->AFR[0] |= (0x00 << GPIO_AFRL_AFSEL3_Pos) | (0x00 << GPIO_AFRL_AFSEL4_Pos) | (0x00 << GPIO_AFRL_AFSEL5_Pos);
+
+    SPI1->CR1 = 0;
+    SPI1->CR2 = 0;
+
+    SPI1->CR1 |= (0b111 << SPI_CR1_BR_Pos);
+    SPI1->CR2 |= SPI_CR1_MSTR | SPI_CR1_SSM | SPI_CR1_SSI;
+
+    SPI2->CR2 |= (0b111 << SPI_CR2_DS_Pos);
+    SPI2->CR2 |= SPI_CR2_FRXTH;
+
+    SPI1->CR1 |= SPI_CR1_SPE;
+}
+
+void enable_sdcard() {
+    GPIOB->BSRR |= (1 << 18);
 }
 
 void disable_sdcard() {
-    RCC->AHBENR |= (RCC_AHBENR_GPIOBEN);
-    GPIOB->MODER &= ~0xFFFFFFFF; //pb2 set to low
-
-    GPIOB->MODER |= (GPIO_MODER_MODER4 | GPIO_MODER_MODER5); //pb2 set to high
+    GPIOB->BSRR |= (1 << 2);
 }
 
 void init_sdcard_io() {
     init_spi1_slow();
-    GPIOB->MODER &= ~0x10; //set pb2 as output
+    GPIOB->MODER &= ~(GPIO_MODER_MODER2);
+    GPIOB->MODER |= 0b01 << GPIO_MODER_MODER2_Pos;
     disable_sdcard();
 }
 
 void sdcard_io_high_speed() {
-    RCC-> APB2ENR &= ~RCC_APB2ENR_SPI1EN;    //spi1 disable
+    SPI1->CR1 &= ~SPI_CR1_SPE;
+    SPI1->CR1 &= ~SPI_CR1_BR;
+    SPI1->CR1 |= (0b001 << SPI_CR1_BR_Pos);
+    SPI1->CR1 |= SPI_CR1_SPE;
+}
 
-
-    RCC-> APB2ENR &= ~RCC_APB2ENR_SPI1EN;    //re-enable spi1 disable
-
+void init_lcd_spi() {
+    RCC->AHBENR |= RCC_AHBENR_GPIOBEN;
+    GPIOB->MODER &= ~(GPIO_MODER_MODER8 | GPIO_MODER_MODER11 | GPIO_MODER_MODER14);
+    GPIOB->MODER |= (GPIO_MODER_MODER8_0 | GPIO_MODER_MODER11_0 | GPIO_MODER_MODER14_0);
+    init_spi1_slow();
+    sdcard_io_high_speed();
 }
