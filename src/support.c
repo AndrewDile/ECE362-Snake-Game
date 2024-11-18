@@ -14,7 +14,6 @@ extern uint8_t snakeLength;
 extern uint32_t snakeSpeed;  // in milliseconds
 extern bool gameOver;
 
-
 // access memory via SPI to SD interface to get high score memory
 void readMemory() {
 
