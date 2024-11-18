@@ -8,29 +8,30 @@
         {
             "name": "PlatformIO",
             "includePath": [
-                "/Users/daniel/Documents/GitHub/ECE362-Snake-Game/include",
-                "/Users/daniel/Documents/GitHub/ECE362-Snake-Game/src",
-                "/Users/daniel/.platformio/packages/framework-cmsis/CMSIS/Include",
-                "/Users/daniel/.platformio/packages/framework-cmsis-stm32f0/Include",
+                "/home/shay/a/dilea/ECE362/ECE362-Snake-Game/include",
+                "/home/shay/a/dilea/ECE362/ECE362-Snake-Game/src",
+                "/home/shay/a/dilea/.platformio/packages/framework-cmsis/CMSIS/Include",
+                "/home/shay/a/dilea/.platformio/packages/framework-cmsis-stm32f0/Include",
                 ""
             ],
             "browse": {
                 "limitSymbolsToIncludedHeaders": true,
                 "path": [
-                    "/Users/daniel/Documents/GitHub/ECE362-Snake-Game/include",
-                    "/Users/daniel/Documents/GitHub/ECE362-Snake-Game/src",
-                    "/Users/daniel/.platformio/packages/framework-cmsis/CMSIS/Include",
-                    "/Users/daniel/.platformio/packages/framework-cmsis-stm32f0/Include",
+                    "/home/shay/a/dilea/ECE362/ECE362-Snake-Game/include",
+                    "/home/shay/a/dilea/ECE362/ECE362-Snake-Game/src",
+                    "/home/shay/a/dilea/.platformio/packages/framework-cmsis/CMSIS/Include",
+                    "/home/shay/a/dilea/.platformio/packages/framework-cmsis-stm32f0/Include",
                     ""
                 ]
             },
             "defines": [
                 "PLATFORMIO=60116",
+                "STM32F0",
                 "STM32F091xC",
                 "F_CPU=48000000L",
                 ""
             ],
-            "compilerPath": "/Users/daniel/.platformio/packages/toolchain-gccarmnoneeabi/bin/arm-none-eabi-gcc",
+            "compilerPath": "/home/shay/a/dilea/.platformio/packages/toolchain-gccarmnoneeabi/bin/arm-none-eabi-gcc",
             "compilerArgs": [
                 "-mthumb",
                 "-mcpu=cortex-m0",
