@@ -7,11 +7,25 @@
   ******************************************************************************
 */
 
+// display is 240x320 pixels
+
 //////////// PIN MAP ////////////
 // 
-//  PA1 as ADC1 -- JoystickX
-//  PA2 as ADC2 -- JoystickY
-//  PA3 as GPIO -- JoystickSw
+//  PA1  as ADC1 -- JoystickX
+//  PA2  as ADC2 -- JoystickY
+//  PA3  as GPIO -- JoystickSw
+//  
+//  PC0  as GPIO -- LcdRS
+//  PC1  as GPIO -- LcdRW
+//  PC2  as GPIO -- LcdE
+//  PC3  as GPIO -- LcdDb0
+//  PC4  as GPIO -- LcdDb1
+//  PC5  as GPIO -- LcdDb2
+//  PC6  as GPIO -- LcdDb3
+//  PC7  as GPIO -- LcdDb4
+//  PC8  as GPIO -- LcdDb5
+//  PC9  as GPIO -- LcdDb6
+//  PC10 as GPIO -- LcdDb7
 //
 /////////////////////////////////
 
