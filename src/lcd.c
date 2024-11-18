@@ -8,7 +8,7 @@
 #include <stdint.h>
 #include "lcd.h"
 
-void nano_wait(int t);
+// void nano_wait(int t);
 
 lcd_dev_t lcddev;
 
@@ -26,6 +26,13 @@ lcd_dev_t lcddev;
 #define DC_BIT (1<<DC_NUM)
 #define DC_HIGH do { GPIOB->BSRR = GPIO_BSRR_BS_14; } while(0)
 #define DC_LOW  do { GPIOB->BSRR = GPIO_BSRR_BR_14; } while(0)
+
+unsigned long startTime = 0;
+
+static void nano_wait(int nanos) {
+    startTime = micros();
+    while (!(micros() - startTime > (nanos / 1000)));
+}
 
 // Set the CS pin low if val is non-zero.
 // Note that when CS is being set high again, wait on SPI to not be busy.

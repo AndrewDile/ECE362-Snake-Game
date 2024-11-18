@@ -94,8 +94,8 @@ extern int8_t gameState;  // game over can be derived from this
 extern int8_t lastGameState;
 extern uint8_t gameboard[NUM_X_CELLS][NUM_Y_CELLS];
 extern segment snake[NUM_X_CELLS * NUM_Y_CELLS];
-int8_t snakeLength = INITIAL_SNAKE_LENGTH; // current score can be derived from this
-uint32_t snakeSpeed = INITIAL_SNAKE_SPEED;
+extern int8_t snakeLength; // current score can be derived from this
+extern uint32_t snakeSpeed;
 extern int8_t joystickDirection;
 
 // function declarations
@@ -112,3 +112,9 @@ void playSound(uint8_t song);
 void stopSound();
 void setupGameDisplay();
 void updateGameDisplay();
+void init_spi1_slow();
+void enable_sdcard();
+void disable_sdcard();
+void init_sdcard_io();
+void sdcard_io_high_speed();
+void init_lcd_spi();

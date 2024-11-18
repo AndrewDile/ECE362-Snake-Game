@@ -8,6 +8,7 @@
 */
 
 #include "header.h"
+#include "lcd.h"
 
 // variables for game state handling
 int8_t gameState = IDLE;
@@ -43,11 +44,17 @@ int main(void) {
     // set up joystick for ADC readings
     setupJoystick();
 
+    init_lcd_spi();
+
+    LCD_Setup();
+    LCD_Clear((uint16_t)0xFFFFFF);
+    LCD_DrawFillRectangle((uint16_t)0, (uint16_t)0, (uint16_t)240, (uint16_t)320, (uint16_t)0xFFFFFF);
+    
     // set flag so this if statement only runs on first loop
     initialized = true;
   }
 
   // update displays
-  updateLCDDisplay();
-  updateGameDisplay();
+  // updateLCDDisplay();
+  // updateGameDisplay();
 }
