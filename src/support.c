@@ -386,3 +386,16 @@ void disable_sdcard() {
     GPIOB->MODER |= (GPIO_MODER_MODER4 | GPIO_MODER_MODER5); //pb2 set to high
 }
 
+void init_sdcard_io() {
+    init_spi1_slow();
+    GPIOB->MODER &= ~0x10; //set pb2 as output
+    disable_sdcard();
+}
+
+void sdcard_io_high_speed() {
+    RCC-> APB2ENR &= ~RCC_APB2ENR_SPI1EN;    //spi1 disable
+
+
+    RCC-> APB2ENR &= ~RCC_APB2ENR_SPI1EN;    //re-enable spi1 disable
+
+}
