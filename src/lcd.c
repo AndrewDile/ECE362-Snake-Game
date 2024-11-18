@@ -27,12 +27,42 @@ lcd_dev_t lcddev;
 #define DC_HIGH do { GPIOB->BSRR = GPIO_BSRR_BS_14; } while(0)
 #define DC_LOW  do { GPIOB->BSRR = GPIO_BSRR_BR_14; } while(0)
 
-unsigned long startTime = 0;
+#define SYSCLK 48000000
 
-static void nano_wait(int nanos) {
-    startTime = micros();
-    while (!(micros() - startTime > (nanos / 1000)));
-}
+void nano_wait();
+
+// void nano_wait(int nanoseconds) {
+//     // Calculate number of ticks needed
+//     // ticks = (nanoseconds * SYSCLK) / 1e9
+//     // To avoid overflow, we'll do this in steps
+    
+//     uint32_t ticks = ((nanoseconds / 1000) * (SYSCLK / 1000000));
+    
+//     if (ticks > 0xFFFFFF) {
+//         // If delay is too long, break it into chunks
+//         while (ticks > 0xFFFFFF) {
+//             // Load maximum value
+//             SysTick->LOAD = 0xFFFFFF;
+//             // Clear current value
+//             SysTick->VAL = 0;
+            
+//             // Wait for flag to be set
+//             while (!(SysTick->CTRL & (1 << 16)));
+            
+//             ticks -= 0xFFFFFF;
+//         }
+//     }
+    
+//     if (ticks > 0) {
+//         // Load remaining ticks
+//         SysTick->LOAD = ticks - 1;
+//         // Clear current value
+//         SysTick->VAL = 0;
+        
+//         // Wait for flag to be set
+//         while (!(SysTick->CTRL & (1 << 16)));
+//     }
+// }
 
 // Set the CS pin low if val is non-zero.
 // Note that when CS is being set high again, wait on SPI to not be busy.

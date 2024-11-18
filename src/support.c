@@ -130,7 +130,7 @@ void setupMovementTimer() {
 
 // Generate new snack at random position
 void generateSnack() {
-    uint8_t x, y;
+    // uint8_t x, y;
     // bool validPosition;
     
     // do {
@@ -361,4 +361,18 @@ void init_lcd_spi() {
     GPIOB->MODER |= (GPIO_MODER_MODER8_0 | GPIO_MODER_MODER11_0 | GPIO_MODER_MODER14_0);
     init_spi1_slow();
     sdcard_io_high_speed();
+}
+
+void systick_init(void) {
+    // Disable SysTick during initialization
+    SysTick->CTRL = 0;
+    
+    // Set maximum reload value
+    SysTick->LOAD = 0xFFFFFF;
+    
+    // Clear current value
+    SysTick->VAL = 0;
+    
+    // Enable SysTick with processor clock
+    SysTick->CTRL = SysTick_CTRL_ENABLE_Msk | SysTick_CTRL_CLKSOURCE_Msk;
 }
